@@ -5,9 +5,9 @@ import studentModel from './model/studentModel.js';
 
 const app = express();
 
-app.use (express.json());
-await mongoose.connect("mongodb://localhost:27017/School" ).then(()=>{
-console.log("___________connected_________")
+app.use(express.json());
+await mongoose.connect("mongodb://localhost:27017/School").then(() => {
+    console.log("___________connected_________")
 })
 app.get("/", async (req, res) => {
 
@@ -17,33 +17,56 @@ app.get("/", async (req, res) => {
 })
 
 
-app.post("/save" ,async (req, res) => {
+app.post("/save", async (req, res) => {
     console.log(req.body);
-    const {name, age, email} = req.body;
+    const { name, age, email } = req.body;
 
     if (!req.body || !name || !age || !email) {
         res.send({
-        message : "Data not  stored",
-        success : False,
-        storedInfo: null
+            message: "Data not  stored",
+            success: False,
+            storedInfo: null
+        })
+    }
+    const studentData = await studentModel.create(req.body)
+    res.send({
+        message: "Data stored",
+        success: true,
+        storedInfo: studentData
+    })
 })
 
-    }
+app.put("/update/:id", async (req, res) =>
+{
+    console.log(req.body);
+const id = req.params.id;
+console.log(req.body,id);
 
 
-    const studentData = await studentModel.create(req.body)
-
-
-
+const studentData = await studentModel.findByIdAndUpdate(id, {...req.body})
     res.send({
-        message : "Data stored",
-        success : true,
+        message: "Data stored",
+        success: true,
         storedInfo: studentData
 })
+});
 
+
+
+app.delete("/delete/:id", async (req, res) =>
+{
+    console.log(req.body);
+const id = req.params.id;
+console.log(req.body,id);
+
+
+const studentData = await studentModel.findByIdAndDelete(id)
+    res.send({
+        message: "Data deleted",
+        success: true,
+        storedInfo: studentData
 })
-
-
+});
 app.listen(3500);
 
 // async function dbConection() {
@@ -63,5 +86,4 @@ app.listen(3500);
 
 
 // dbConection();
-        
-    
+
