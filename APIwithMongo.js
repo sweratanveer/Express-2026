@@ -75,6 +75,75 @@ app.delete("/delete/:id", async (req, res) => {
 }
 
 });
+
+
+app.get("/ui/delete/:id", async (req, res) => {
+    console.log(req.params.id);
+    const collection = db.collection('students')
+    const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) })
+
+    if(result){
+    res.send(" <h1>Student deleted successfully</h1>")
+}else{    
+     res.send(" <h1>Student not  deleted </h1>")
+}
+
+});
+
+
+app.get("/ui/student/:id", async (req, res) => {
+    const id = (req.params.id);
+    console.log(id);
+    const collection = db.collection('students')
+    const result = await collection.findOne({ _id: new ObjectId(req.params.id) })
+    res.render('update-student', {result})
+});
+
+
+
+app.get("/student/:id", async (req, res) => {
+    const id = (req.params.id);
+    console.log(id);
+    const collection = db.collection('students')
+    const result = await collection.findOne({ _id: new ObjectId(req.params.id) })
+    res.send({
+        message:"Student found",
+        sucess:true,
+        result:result
+    });
+});
+
+
+app.put("/update/:id", async (req, res) => {
+    console.log(req.body);
+    console.log(req.params.id);
+
+    const collection = db.collection('students');
+
+    const filter = { _id: new ObjectId(req.params.id) };
+    const update = { $set: req.body };
+
+    const result = await collection.updateOne(filter, update);
+
+    if (result) {
+        res.send({
+        message:"Data Updated",
+        sucess:true,
+        result:req.body
+    })
+    } else {
+       res.send({
+        message:"Data not updated",
+        sucess:false,
+        result:null
+    })
+    }
+});
+
+
+
+
+
 app.listen(3500, () => {
     console.log("Server running on port 3500");
 })

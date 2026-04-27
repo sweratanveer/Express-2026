@@ -15,18 +15,20 @@
             <td>Name</td>
             <td>Email</td>
             <td>Age</td>
-            <td>Operations</td>
+            <td>Deletion</td>
+            <td>Updation</td>
             
         </tr>
 <% students.forEach(student => { %>
 
 
-         <tr>
-            <td><%= student.name %></td>
-            <td><%= student.age %></td>
-            <td><%= student.email %></td>
-            <td><a href="<%= student._id %>"></a>Delete</td>
-        </tr>
+        <tr>
+   <td><%= student.name %></td>
+<td><%= student.email %></td>
+<td><%= student.age %></td>
+<td><a href="/ui/delete/<%= student._id %>">Delete</a></td>
+<td><a href="/ui/student/<%= student._id %>">Update</a></td>
+</tr>
 <% }) %>
     </table>
 </body>
